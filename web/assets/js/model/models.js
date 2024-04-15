@@ -28,6 +28,7 @@ class Msg {
 class DBInbound {
 
     constructor(data) {
+        
         this.id = 0;
         this.userId = 0;
         this.up = 0;
@@ -158,6 +159,11 @@ class DBInbound {
 class AllSetting {
 
     constructor(data) {
+        this.configPortStart = 50000;
+        this.configPortEnd = 60000;
+        this.configCertDomain = "";
+        this.configCertFile = "";
+        this.configKeyFile = "";
         this.webListen = "";
         this.webPort = 54321;
         this.webCertFile = "";

@@ -63,6 +63,9 @@
                                         <a-menu-item key="edit">
                                             <a-icon type="edit"></a-icon>编辑
                                         </a-menu-item>
+                                        <a-menu-item key="copy">
+                                            <a-icon type="copy"></a-icon>复制
+                                        </a-menu-item>
                                         <a-menu-item key="resetTraffic">
                                             <a-icon type="retweet"></a-icon>重置流量
                                         </a-menu-item>
@@ -181,10 +184,18 @@
             inbounds: [],
             dbInbounds: [],
             searchKey: '',
+            allSettings: {}
         },
         methods: {
             loading(spinning=true) {
                 this.spinning = spinning;
+            },
+            async getAllSettings() {
+                const res = await HttpUtil.post('/xui/setting/all');
+                if (!res.success) {
+                    return;
+                }
+                this.allSettings = res.obj;
             },
             async getDBInbounds() {
                 this.loading();
@@ -224,6 +235,9 @@
                     case "edit":
                         this.openEditInbound(dbInbound);
                         break;
+                    case "copy":
+                        this.openCopyInbound(dbInbound);
+                        break;
                     case "resetTraffic":
                         this.resetTraffic(dbInbound);
                         break;
@@ -236,6 +250,28 @@
                 inModal.show({
                     title: '添加入站',
                     okText: '添加',
+                    allSettings: this.allSettings,
+                    confirm: async (inbound, dbInbound) => {
+                        inModal.loading();
+                        await this.addInbound(inbound, dbInbound);
+                        inModal.close();
+                    }
+                });
+            },
+            openCopyInbound(dbInbound) {
+                const inbound = dbInbound.toInbound();
+                inbound.id = null
+                inbound.remark = `${inbound.remark}-copy`;
+                const id = RandomUtil.randomUUID()
+                inbound.port = RandomUtil.randomIntRange(this.allSettings.configPortStart||50000, this.allSettings.configPortEnd||60000)
+                inbound.settings[inbound.settings.protocol+'es'][0].id = id
+                inbound.settings.id = id
+                console.log("inbound", inbound)
+                inModal.show({
+                    title: '复制入站',
+                    okText: '确定',
+                    inbound: inbound,
+                    dbInbound: dbInbound,
                     confirm: async (inbound, dbInbound) => {
                         inModal.loading();
                         await this.addInbound(inbound, dbInbound);
@@ -339,6 +375,7 @@
             }
         },
         mounted() {
+            this.getAllSettings();
             this.getDBInbounds();
         },
         computed: {
