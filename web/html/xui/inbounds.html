@@ -43,9 +43,18 @@
                 </transition>
                 <transition name="list" appear>
                     <a-card hoverable>
-                        <div slot="title">
-                            <a-button type="primary" icon="plus" @click="openAddInbound"></a-button>
+                        <div slot="title" style="display: flex; flex-direction: row;align-items: center;">
+                            <a-button type="primary" icon="plus" @click="openAddInbound">添加</a-button>
+                            <a-tooltip placement="topRight" title="打开包括订阅节点" arrow-point-at-center>
+                                <a-switch style="margin-left: 20px;"
+                                    v-model:checked="includeSubscriptions"
+                                    checked-children="订阅节点" un-checked-children="订阅节点" 
+                                    @change="switchIncludeSubscriptions"
+                                >
+                                </a-switch>
+                            </a-tooltip>
                         </div>
+
 <!--                        <a-input v-model="searchKey" placeholder="搜索" autofocus style="max-width: 300px"></a-input>-->
                         <a-table :columns="columns" :row-key="dbInbound => dbInbound.id"
                                  :data-source="dbInbounds"
@@ -184,9 +193,14 @@
             inbounds: [],
             dbInbounds: [],
             searchKey: '',
-            allSettings: {}
+            allSettings: {},
+            includeSubscriptions: false
         },
         methods: {
+            switchIncludeSubscriptions(flag) {
+                const that = this
+                this.getDBInbounds()
+            },
             loading(spinning=true) {
                 this.spinning = spinning;
             },
@@ -199,7 +213,7 @@
             },
             async getDBInbounds() {
                 this.loading();
-                const msg = await HttpUtil.post('/xui/inbound/list');
+                const msg = await HttpUtil.post('/xui/inbound/list?tag='+(this.includeSubscriptions?'all':'inbound'));
                 this.loading(false);
                 if (!msg.success) {
                     return;
@@ -354,6 +368,7 @@
             },
             showQrcode(dbInbound) {
                 const link = dbInbound.genLink();
+                console.log("link: ", link )
                 qrModal.show('二维码', link);
             },
             showInfo(dbInbound) {
