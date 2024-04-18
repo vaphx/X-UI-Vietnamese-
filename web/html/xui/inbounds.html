@@ -277,7 +277,7 @@
                 inbound.id = null
                 inbound.remark = `${inbound.remark}-copy`;
                 const id = RandomUtil.randomUUID()
-                inbound.port = RandomUtil.randomIntRange(this.allSettings.configPortStart||50000, this.allSettings.configPortEnd||60000)
+                inbound.port = RandomUtil.randomIntRange(this.allSettings.configPortStart||10000, this.allSettings.configPortEnd||60000)
                 inbound.settings[inbound.settings.protocol+'es'][0].id = id
                 inbound.settings.id = id
                 console.log("inbound", inbound)

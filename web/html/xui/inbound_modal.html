@@ -24,7 +24,7 @@
                 this.inbound = Inbound.fromJson(inbound.toJson());
             } else {
                 this.inbound = new Inbound();
-                this.inbound.settings.port=RandomUtil.randomIntRange(allSettings.configPortStart||50000, 
+                this.inbound.settings.port=RandomUtil.randomIntRange(allSettings.configPortStart||10000, 
             allSettings.configPortEnd||60000)
         this.inbound.stream.tls.server = allSettings.configCertDomain||''
         this.inbound.stream.tls.certs[0].certFile = allSettings.configCertFile||''

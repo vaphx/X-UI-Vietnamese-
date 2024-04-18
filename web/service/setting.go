@@ -22,11 +22,11 @@ var xrayTemplateConfig string
 
 var defaultValueMap = map[string]string{
 
-	"configPortStart": "50000",
-	"configPortEnd": "60000",
-	"configCertDomain": "",
-	"configCertFile": "",
-	"configKeyFile": "",
+	"configPortStart":    "10000",
+	"configPortEnd":      "60000",
+	"configCertDomain":   "",
+	"configCertFile":     "",
+	"configKeyFile":      "",
 	"xrayTemplateConfig": xrayTemplateConfig,
 	"webListen":          "",
 	"webPort":            "54321",
