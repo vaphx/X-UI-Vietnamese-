@@ -133,13 +133,17 @@ func (a *SubscriptionController) getSubscriptionByToken(c *gin.Context) {
 		if err != nil {
 			fmt.Printf("创建新的节点 error: %v", err)
 			a.setOutput(c, 500, subList)
+			return
 		}
 		idsStr, err := json.Marshal(inboundIds)
 		if err != nil {
 			fmt.Printf("创建新的节点 error: %v", err)
 			a.setOutput(c, 500, subList)
+			return
 		}
 		subscription.InboundIds = string(idsStr)
+
+		a.xrayService.SetToNeedRestart()
 
 	}
 
