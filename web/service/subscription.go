@@ -83,16 +83,16 @@ func (s *SubscriptionService) CreateAndSaveInbounds(tx *gorm.DB, subscription *m
 	fmt.Printf("ports:%v\n", ports)
 	for i := 0; i < availableCount; i++ {
 		newInbound := &model.Inbound{
-			Port:           ports[i],
-			Enable:         subscription.Enable,
-			Protocol:       inbound.Protocol,
-			StreamSettings: inbound.StreamSettings,
-			Sniffing:       inbound.Sniffing,
-			Remark:         fmt.Sprintf("订阅节点，请勿删除！copy-%d", sampleId),
-			UserId:         subscription.UserId,
-			ExpiryTime:     subscription.ExpiryTime,
-			Tag:            fmt.Sprintf("subscription-%v", ports[i]),
+			Port:       ports[i],
+			Enable:     subscription.Enable,
+			Protocol:   inbound.Protocol,
+			Sniffing:   inbound.Sniffing,
+			Remark:     fmt.Sprintf("订阅节点，请勿删除！copy-%d", sampleId),
+			UserId:     subscription.UserId,
+			ExpiryTime: subscription.ExpiryTime,
+			Tag:        fmt.Sprintf("subscription-%v", ports[i]),
 		}
+		// 处理 settings
 		settings := inbound.Settings
 		var j map[string]interface{}
 		json.Unmarshal([]byte(settings), &j)
@@ -101,7 +101,36 @@ func (s *SubscriptionService) CreateAndSaveInbounds(tx *gorm.DB, subscription *m
 		modifiedSettings, _ := json.Marshal(j)
 		newInbound.Settings = string(modifiedSettings)
 
-		err := tx.Save(&newInbound).Error
+		// 处理 streamSettings
+		streamSettings := inbound.StreamSettings
+		var ssJson map[string]interface{}
+		err := json.Unmarshal([]byte(streamSettings), &ssJson)
+		if err != nil {
+			fmt.Printf("json.Unmarshal failed: %v\n", err)
+			return nil, err
+		}
+		for k := range ssJson {
+			// http settings
+			if k == "httpSettings" {
+				httpSettings := ssJson["httpSettings"].(map[string]interface{})
+				if httpSettings != nil {
+					httpSettings["path"] = fmt.Sprintf("/auto-http-%v", ports[i])
+					ssJson["httpSettings"] = httpSettings
+				}
+			} else if k == "wsSettings" {
+				// ws settings
+				wsSettings := ssJson["wsSettings"].(map[string]interface{})
+				if wsSettings != nil {
+					wsSettings["path"] = fmt.Sprintf("/auto-ws-%v", ports[i])
+					ssJson["wsSettings"] = wsSettings
+				}
+			}
+		}
+
+		modifiedStreamSettings, _ := json.Marshal(ssJson)
+		newInbound.StreamSettings = string(modifiedStreamSettings)
+
+		err = tx.Save(&newInbound).Error
 		if err != nil {
 			return nil, err
 		}
