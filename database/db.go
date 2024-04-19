@@ -1,14 +1,16 @@
 package database
 
 import (
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
+	"github.com/glebarez/sqlite"
+	// "github.com/glebarez/sqlite"
 	"io/fs"
 	"os"
 	"path"
 	"x-ui/config"
 	"x-ui/database/model"
+
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var db *gorm.DB
@@ -84,7 +86,7 @@ func InitDB(dbPath string) error {
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
 }
 

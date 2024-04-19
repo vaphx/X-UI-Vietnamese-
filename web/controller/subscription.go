@@ -6,11 +6,11 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"strconv"
 	"strings"
 	"time"
 	"x-ui/database/model"
+	"x-ui/web/global"
 	"x-ui/web/service"
 	"x-ui/web/session"
 
@@ -32,12 +32,12 @@ func NewSubscriptionController(g *gin.RouterGroup) *SubscriptionController {
 	// a.startTask()
 
 	a.vm = goja.New()
-	// 读取 JavaScript 文件内容
-	jsXray := "./web/assets/js/model/xray.js"
-	jsModels := "./web/assets/js/model/models.js"
-	jsUtils := "./web/assets/js/util/utils.js"
-	jsLinkUtil := "./web/assets/js/util/link-util.js"
-	jsBase64 := "./web/assets/base64/base64.min.js"
+	// 读取 JavaScript 文件内容 assets
+	jsXray := "js/model/xray.js"
+	jsModels := "js/model/models.js"
+	jsUtils := "js/util/utils.js"
+	jsLinkUtil := "js/util/link-util.js"
+	jsBase64 := "base64/base64.min.js"
 
 	err := a.initJs(jsUtils)
 	if err != nil {
@@ -68,7 +68,10 @@ func NewSubscriptionController(g *gin.RouterGroup) *SubscriptionController {
 }
 
 func (a *SubscriptionController) initJs(jsPath string) error {
-	jsContent, err := ioutil.ReadFile(jsPath)
+	webServer := global.GetWebServer()
+	jsContent, err := webServer.ReadAssets(jsPath)
+	// var jsContent []byte
+	// _, err = file.Read(jsContent)
 	if err != nil {
 		fmt.Printf("读取 %s 文件失败: %v\n", jsPath, err)
 		return nil
