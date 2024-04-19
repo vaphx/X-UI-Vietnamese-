@@ -119,7 +119,7 @@ func (a *SubscriptionController) getSubscriptionByToken(c *gin.Context) {
 	if !subscription.Enable ||
 		(subscription.ExpiryTime > 0 &&
 			subscription.ExpiryTime < time.Now().Unix()*1000) {
-		fmt.Printf("订阅已过期\n")
+		fmt.Printf("订阅已禁用or已过期\n")
 		a.setOutput(c, 403, subList)
 		return
 	}

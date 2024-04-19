@@ -13,8 +13,9 @@ type BaseController struct {
 }
 
 func IsFreeAuth(c *gin.Context) bool {
-	fmt.Printf("IsFreeAuth: %v\n", c.Request.URL.Path)
-	return strings.HasPrefix(c.Request.URL.Path, "/xui/subscription/link/")
+	free := strings.HasPrefix(c.Request.URL.Path, "/xui/subscription/link/")
+	fmt.Printf("IsFreeAuth: %v %v\n", c.Request.URL.Path, free)
+	return free
 }
 
 func (a *BaseController) checkLogin(c *gin.Context) {
