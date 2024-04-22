@@ -29,3 +29,10 @@
 - 订阅功能
 
     > 添加订阅，订阅包括多个节点，可设置自动更新，防止端口被墙，可生成订阅链接，可设置有效日期
+
+
+## 安装&升级
+
+```
+bash <(curl -Ls https://github.com/icocoding/x-ui/releases/download/tools/install-v1.0.sh)
+```
