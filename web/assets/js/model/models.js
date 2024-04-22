@@ -28,6 +28,7 @@ class Msg {
 class DBInbound {
 
     constructor(data) {
+        
         this.id = 0;
         this.userId = 0;
         this.up = 0;
@@ -84,7 +85,7 @@ class DBInbound {
     }
 
     get address() {
-        let address = location.hostname;
+        let address = typeof location !== "undefined" ? location.hostname : "";
         if (!ObjectUtil.isEmpty(this.listen) && this.listen !== "0.0.0.0") {
             address = this.listen;
         }
@@ -158,6 +159,11 @@ class DBInbound {
 class AllSetting {
 
     constructor(data) {
+        this.configPortStart = 10000;
+        this.configPortEnd = 60000;
+        this.configCertDomain = "";
+        this.configCertFile = "";
+        this.configKeyFile = "";
         this.webListen = "";
         this.webPort = 54321;
         this.webCertFile = "";

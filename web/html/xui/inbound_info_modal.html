@@ -18,7 +18,7 @@
                 style: "",
             },
         },
-        show(dbInbound) {
+        show(dbInbound, allSettings) {
             this.inbound = dbInbound.toInbound();
             this.dbInbound = new DBInbound(dbInbound);
             this.visible = true;

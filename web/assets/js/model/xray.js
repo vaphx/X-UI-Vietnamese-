@@ -615,6 +615,7 @@ class Inbound extends XrayCommonClass {
         this._protocol = protocol;
         this.settings = ObjectUtil.isEmpty(settings) ? Inbound.Settings.getSettings(protocol) : settings;
         this.stream = streamSettings;
+
         this.tag = tag;
         this.sniffing = sniffing;
     }
