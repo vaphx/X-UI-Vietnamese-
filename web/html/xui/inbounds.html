@@ -258,6 +258,9 @@
                 });
             },
             async addInbound(inbound, dbInbound) {
+                if(inbound.settings.vlesses){
+                    delete inbound.settings.vlesses[0].flow;
+                }
                 const data = {
                     up: dbInbound.up,
                     down: dbInbound.down,
@@ -276,6 +279,9 @@
                 await this.submit('/xui/inbound/add', data, inModal);
             },
             async updateInbound(inbound, dbInbound) {
+                if(inbound.settings.vlesses){
+                    delete inbound.settings.vlesses[0].flow;
+                }
                 const data = {
                     up: dbInbound.up,
                     down: dbInbound.down,
