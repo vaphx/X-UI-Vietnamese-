@@ -17,7 +17,7 @@ Supports multi-protocol and multi-user xray panel
 # Installation & Upgrade
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/vanphx/X-UI-Vietnamese-/master/install.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/vaphx/X-UI-Vietnamese-/refs/heads/main/install.sh)
 ```
 
 ## 手动安装&升级
